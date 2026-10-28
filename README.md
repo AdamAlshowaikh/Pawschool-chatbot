@@ -1,4 +1,4 @@
-# Paws Chatbot (free, one-day build)
+# Paws Chatbot 
 
 A small chatbot API with a chat page. It works with any OpenAI-compatible provider, so you can run it fully free and offline with Ollama, or use a free-tier API key from Gemini or Groq.
 
