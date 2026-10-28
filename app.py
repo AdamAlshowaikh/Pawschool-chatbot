@@ -81,7 +81,7 @@ def chat(body: ChatIn):
     history = sessions.setdefault(sid, [])
     history.append({"role": "user", "content": body.message})
     # Keep only the last N exchanges so the prompt stays small.
-    del history[: max(0, len(history) - MAX_TURNS * 2)]
+    history[: max(0, len(history) - MAX_TURNS * 2)]
 
     messages = [{"role": "system", "content": SYSTEM_PROMPT}, *history]
     start = time.perf_counter()
