@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paw School Helper - Board & Train</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --user-msg: #2563eb;
+    --bot-msg: #f8fafc;
+    --bot-border: #e2e8f0;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    /* Playful background with custom SVG dog bones and paw prints */
+    background-color: #f1f5f9;
+    background-image: 
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 100 100'%3E%3Ctext x='10' y='30' font-size='20' opacity='0.18'%3E🐾%3C/text%3E%3Ctext x='55' y='75' font-size='20' opacity='0.18'%3E🦴%3C/text%3E%3C/svg%3E");
+    background-size: 80px 80px;
+    color: var(--text-main);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  main {
+    width: 100%;
+    max-width: 720px;
+    height: 94vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--card);
+    border-radius: 24px;
+    box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.08);
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+  }
+
+  /* Header Styling */
+  .header {
+    background: #ffffff;
+    padding: 20px 24px;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  /* Much larger, prominent circular logo with a clean slate border */
+  .avatar-logo {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #cbd5e1;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+    background: #fff;
+  }
+
+  .header-info h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-main);
+    letter-spacing: -0.01em;
+  }
+
+  .header-info p {
+    font-size: 0.85rem;
+    margin: 3px 0 0;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #10b981;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+  }
+
+  /* Chat Log Container */
+  #log {
+    flex: 1;
+    overflow-y: auto;
+    background: #fafafa;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    scroll-behavior: smooth;
+  }
+
+  /* Message Bubbles */
+  .msg {
+    max-width: 82%;
+    padding: 14px 18px;
+    border-radius: 18px;
+    white-space: pre-wrap;
+    line-height: 1.55;
+    font-size: 0.96rem;
+    animation: fadeIn 0.2s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .me {
+    align-self: flex-end;
+    background: var(--user-msg);
+    color: #ffffff;
+    border-bottom-right-radius: 6px;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  }
+
+  .bot {
+    align-self: flex-start;
+    background: var(--bot-msg);
+    color: var(--text-main);
+    border: 1px solid var(--bot-border);
+    border-bottom-left-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  }
+
+  /* Metadata & Feedback Controls */
+  .meta {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .meta button {
+    border: none;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 4px 10px;
+    border-radius: 8px;
+    transition: all 0.15s ease;
+  }
+
+  .meta button:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+  }
+
+  /* Form & Input Bar */
+  form {
+    display: flex;
+    gap: 12px;
+    padding: 18px 24px;
+    background: #ffffff;
+    border-top: 1px solid #f1f5f9;
+    align-items: center;
+  }
+
+  input {
+    flex: 1;
+    padding: 14px 18px;
+    border: 1px solid #cbd5e1;
+    border-radius: 14px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    outline: none;
+    transition: all 0.2s ease;
+    background: #f8fafc;
+  }
+
+  input:focus {
+    border-color: var(--primary);
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+  }
+
+  button.send {
+    padding: 14px 24px;
+    border: none;
+    border-radius: 14px;
+    background: var(--primary);
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  }
+
+  button.send:hover {
+    background: var(--primary-hover);
+  }
+
+  button.send:active {
+    transform: scale(0.98);
+  }
+
+  button.send:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  @media (max-width: 640px) {
+    main {
+      height: 100vh;
+      border-radius: 0;
+    }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="header">
+    <img src="/static/Pawschool Logo.jpg" alt="Paw School Logo" class="avatar-logo">
+    <div class="header-info">
+      <h1>Paw School Helper</h1>
+      <p><span class="status-dot"></span> Board & Train Assistant • Always Online</p>
+    </div>
+  </div>
+  
+  <div id="log"></div>
+
+  <form id="form">
+    <input id="input" placeholder="Ask about dog training, behavior, or board & train..." autocomplete="off" maxlength="2000" required>
+    <button class="send" id="send">Send</button>
+  </form>
+</main>
+
+<script>
+const log = document.getElementById('log');
+const form = document.getElementById('form');
+const input = document.getElementById('input');
+const send = document.getElementById('send');
+let sessionId = null;
+
+function add(text, cls) {
+  const div = document.createElement('div');
+  div.className = 'msg ' + cls;
+  div.textContent = text;
+  log.appendChild(div);
+  log.scrollTop = log.scrollHeight;
+  return div;
+}
+
+async function rate(chatId, value, meta) {
+  await fetch('/feedback', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chat_id: chatId, value })
+  });
+  meta.textContent = value === 1 ? 'Thanks for the thumbs up!' : 'Thanks, feedback recorded.';
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const text = input.value.trim();
+  if (!text) return;
+  add(text, 'me');
+  input.value = '';
+  send.disabled = true;
+  const pending = add('Thinking...', 'bot');
+  try {
+    const res = await fetch('/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text, session_id: sessionId })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || 'Request failed');
+    sessionId = data.session_id;
+    pending.textContent = data.reply;
+
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    meta.innerHTML = `<span>${data.latency_ms} ms</span>`;
+
+    const up = document.createElement('button'); up.textContent = '👍';
+    const down = document.createElement('button'); down.textContent = '👎';
+    up.onclick = () => rate(data.chat_id, 1, meta);
+    down.onclick = () => rate(data.chat_id, -1, meta);
+
+    meta.append(up, down);
+    pending.appendChild(meta);
+  } catch (err) {
+    pending.textContent = 'Error: ' + err.message;
+  } finally {
+    send.disabled = false;
+    input.focus();
+  }
+});
+</script>
+</body>
+</html>
