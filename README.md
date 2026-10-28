@@ -35,16 +35,7 @@ uvicorn app:app --reload
 
 Open http://localhost:8000.
 
-## Suggested plan for the day
 
-| Time | Task |
-|---|---|
-| Hour 1 | Install, run it, change the system prompt to your own topic |
-| Hour 2 | Try 20 questions, note where answers are weak, improve the prompt |
-| Hour 3 | Read `app.py` line by line until you can explain each part |
-| Hour 4 | Add one test: call `/chat` with `pytest` and `fastapi.testclient` |
-| Hour 5 | Push to GitHub (check that `.env` and `chat_logs.db` are in `.gitignore`) |
-| Hour 6 | Write up what you built, what it can't do, and what you would add next |
 
 ## Free hosting (optional)
 
@@ -57,9 +48,4 @@ Ollama only runs on your own machine. To put the bot online for free, use Option
 - Small local models make more mistakes than large hosted ones.
 - No login, so do not expose it publicly without adding auth and rate limiting.
 
-## Next steps (to make it job-relevant)
 
-1. Add RAG: embed your own documents and answer only from them.
-2. Add one tool call (for example a weather or booking lookup).
-3. Build a 30 question test set and score answers automatically.
-4. Dockerize it and add GitHub Actions CI.
